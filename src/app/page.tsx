@@ -5,35 +5,57 @@ import { useAccount, useSignTypedData } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const defaultDomain = {
-  name: "Clementine",
+  name: "ClementineOptimisticPayout",
   version: "1",
-  chainId: 5115,
-  verifyingContract: "0x0000000000000000000000000000000000000000" as `0x${string}`,
+};
+
+// Custom JSON replacer to handle BigInt
+const jsonReplacer = (key: string, value: any) => {
+  if (typeof value === "bigint") {
+    return value.toString();
+  }
+  return value;
 };
 
 const defaultTypes = {
-  Outpoint: [
-    { name: "txid", type: "bytes32" },
-    { name: "vout", type: "uint32" },
-  ],
-  Withdrawal: [
-    { name: "withdrawal_id", type: "uint32" },
-    { name: "input_signature", type: "bytes" },
-    { name: "input_outpoint", type: "Outpoint" },
-    { name: "output_script_pubkey", type: "bytes" },
-    { name: "output_amount", type: "uint32" },
+  OptimisticPayoutParams: [
+    {
+      name: "withdrawal_id",
+      type: "uint32",
+    },
+    {
+      name: "input_signature",
+      type: "bytes",
+    },
+    {
+      name: "input_outpoint_txid",
+      type: "bytes32",
+    },
+    {
+      name: "input_outpoint_vout",
+      type: "uint32",
+    },
+    {
+      name: "output_script_pubkey",
+      type: "bytes",
+    },
+    {
+      name: "output_amount",
+      type: "uint64",
+    },
   ],
 };
 
 const defaultValue = {
   withdrawal_id: 1,
-  input_signature: "0x",
-  input_outpoint: {
-    txid: "0x0000000000000000000000000000000000000000000000000000000000000000",
-    vout: 0,
-  },
-  output_script_pubkey: "0x",
-  output_amount: 0,
+  input_signature:
+    "0xe8b82defd5e7745731737d210ad3f649541fd1e3173424fe6f9152b11cf8a1f9e24a176690c2ab243fb80ccc43369b2aba095b011d7a3a7c2a6953ef6b102643",
+  input_outpoint_txid:
+    "0x0000000000000000000000000000000000000000000000000000000000000000",
+  input_outpoint_vout: 0,
+  output_script_pubkey:
+    "0x0000000000000000000000000000000000000000000000000000000000000000",
+  output_amount: 1000000000000000000,
 };
 
 type TypeDefinition = { name: string; type: string }[];
@@ -41,11 +63,16 @@ type TypeDefinition = { name: string; type: string }[];
 export default function Home() {
   const { isConnected } = useAccount();
   const [domain, setDomain] = useState(defaultDomain);
-  const [types, setTypes] = useState<Record<string, TypeDefinition>>(defaultTypes);
+  const [types, setTypes] =
+    useState<Record<string, TypeDefinition>>(defaultTypes);
   const [value, setValue] = useState(defaultValue);
   const [signature, setSignature] = useState("");
-  const [selectedType, setSelectedType] = useState("Mail");
-  const [editingJson, setEditingJson] = useState<"domain" | "types" | "message" | null>(null);
+  const [selectedType, setSelectedType] = useState(
+    Object.keys(defaultTypes)[0]
+  ); // Use first type from defaultTypes
+  const [editingJson, setEditingJson] = useState<
+    "domain" | "types" | "message" | null
+  >(null);
 
   const { signTypedDataAsync } = useSignTypedData();
 
@@ -93,7 +120,27 @@ export default function Home() {
     value: any;
     onSave: (value: string) => void;
   }) => {
-    const [text, setText] = useState(JSON.stringify(value, null, 2));
+    const [text, setText] = useState(JSON.stringify(value, jsonReplacer, 2));
+
+    const handleSave = () => {
+      try {
+        const parsed = JSON.parse(text, (key, value) => {
+          // Handle BigInt values in strings
+          if (typeof value === "string" && /^\d+$/.test(value)) {
+            try {
+              return BigInt(value);
+            } catch {
+              return value;
+            }
+          }
+          return value;
+        });
+        onSave(text);
+      } catch (error) {
+        console.error("Invalid JSON:", error);
+      }
+    };
+
     return (
       <div className="space-y-4">
         <textarea
@@ -103,7 +150,7 @@ export default function Home() {
         />
         <div className="flex gap-2">
           <button
-            onClick={() => onSave(text)}
+            onClick={handleSave}
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
           >
             Save
@@ -145,7 +192,7 @@ export default function Home() {
         />
       ) : (
         <pre className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg overflow-auto text-sm">
-          {JSON.stringify(data, null, 2)}
+          {JSON.stringify(data, jsonReplacer, 2)}
         </pre>
       )}
     </div>
