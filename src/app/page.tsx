@@ -5,7 +5,7 @@ import { useAccount, useSignTypedData } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const defaultDomain = {
-  name: "ClementineOptimisticPayout",
+  name: "ClementineVerification",
   version: "1",
 };
 
@@ -18,7 +18,33 @@ const jsonReplacer = (key: string, value: any) => {
 };
 
 const defaultTypes = {
-  OptimisticPayoutParams: [
+  OptimisticPayoutMessage: [
+    {
+      name: "withdrawal_id",
+      type: "uint32",
+    },
+    {
+      name: "input_signature",
+      type: "bytes",
+    },
+    {
+      name: "input_outpoint_txid",
+      type: "bytes32",
+    },
+    {
+      name: "input_outpoint_vout",
+      type: "uint32",
+    },
+    {
+      name: "output_script_pubkey",
+      type: "bytes",
+    },
+    {
+      name: "output_amount",
+      type: "uint64",
+    },
+  ],
+  OperatorWithdrawalMessage: [
     {
       name: "withdrawal_id",
       type: "uint32",
