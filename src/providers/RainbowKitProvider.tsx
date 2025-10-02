@@ -1,7 +1,6 @@
-"use client";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { WagmiConfig, WagmiProvider } from "wagmi";
+import { WagmiProvider } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
@@ -37,7 +36,7 @@ const config = getDefaultConfig({
   appName: "EIP-712 Signer",
   projectId: "de09cad5fe492472b89b708eef3252e0",
   chains: [citreaTestnet, mainnet, polygon, optimism, arbitrum, base],
-  ssr: true,
+  ssr: false,
 });
 
 const queryClient = new QueryClient();

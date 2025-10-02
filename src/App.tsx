@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useAccount, useSignTypedData } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -86,7 +84,7 @@ const defaultValue = {
 
 type TypeDefinition = { name: string; type: string }[];
 
-export default function Home() {
+export default function App() {
   const { isConnected } = useAccount();
   const [domain, setDomain] = useState(defaultDomain);
   const [types, setTypes] =
