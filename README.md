@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EIP-712 Signer
 
-## Getting Started
+A React application for signing EIP-712 typed data using Web3 wallets.
 
-First, run the development server:
+## Features
+
+- Connect Web3 wallets via RainbowKit
+- Sign EIP-712 typed data messages
+- Edit domain, types, and message data
+- Support for multiple blockchain networks
+- Modern, responsive UI with Tailwind CSS
+
+## Development
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+```bash
+npm install
+```
+
+### Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Standard Build
+```bash
+npm run build
+```
 
-## Learn More
+#### Single File Build
+```bash
+npm run build:single
+```
 
-To learn more about Next.js, take a look at the following resources:
+The single file build creates a self-contained `dist/index.html` file (~4.8MB) that includes all JavaScript, CSS, and assets inlined. This is perfect for:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Sharing the application as a single file
+- Deploying to static file hosting
+- Offline usage
+- Embedding in other applications
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Configuration
 
-## Deploy on Vercel
+The application is configured to work with multiple blockchain networks including:
+- Citrea Testnet
+- Ethereum Mainnet
+- Polygon
+- Optimism
+- Arbitrum
+- Base
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Technologies Used
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **React 18** - UI framework
+- **Vite** - Build tool and dev server
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **RainbowKit** - Wallet connection UI
+- **Wagmi** - React hooks for Ethereum
+- **Viem** - Ethereum library
+- **vite-plugin-singlefile** - Single file build support
+
+## Project Structure
+
+```
+src/
+├── main.tsx              # Application entry point
+├── App.tsx               # Main application component
+├── index.css             # Global styles
+└── providers/
+    └── RainbowKitProvider.tsx  # Web3 provider setup
+```
+
+## License
+
+MIT
