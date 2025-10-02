@@ -56,14 +56,20 @@ The single file build creates a self-contained `dist/index.html` file (~4.8MB) t
 
 The project includes a GitHub Action workflow that automatically deploys the single file build to GitHub Pages when you push to the `main` branch.
 
+**How it works:**
+- The workflow builds the single file version (`npm run build:single`)
+- Publishes the `dist/index.html` to a `gh-pages` branch
+- GitHub Pages serves the content from the `gh-pages` branch
+
 **Setup:**
 1. Enable GitHub Pages in your repository settings
-2. Set the source to "GitHub Actions"
-3. Push to the `main` branch to trigger deployment
+2. Set the source to "Deploy from a branch"
+3. Select `gh-pages` branch and `/ (root)` folder
+4. Push to the `main` branch to trigger deployment
 
 The workflow will:
 - Build the single file version
-- Deploy it to GitHub Pages
+- Create/update the `gh-pages` branch with your built files
 - Make it available at `https://yourusername.github.io/your-repo-name`
 
 **Manual deployment:**
