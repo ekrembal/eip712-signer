@@ -50,6 +50,25 @@ The single file build creates a self-contained `dist/index.html` file (~4.8MB) t
 - Offline usage
 - Embedding in other applications
 
+## Deployment
+
+### GitHub Pages
+
+The project includes a GitHub Action workflow that automatically deploys the single file build to GitHub Pages when you push to the `main` branch.
+
+**Setup:**
+1. Enable GitHub Pages in your repository settings
+2. Set the source to "GitHub Actions"
+3. Push to the `main` branch to trigger deployment
+
+The workflow will:
+- Build the single file version
+- Deploy it to GitHub Pages
+- Make it available at `https://yourusername.github.io/your-repo-name`
+
+**Manual deployment:**
+You can also trigger the deployment manually from the Actions tab in your GitHub repository.
+
 ## Configuration
 
 The application is configured to work with multiple blockchain networks including:
